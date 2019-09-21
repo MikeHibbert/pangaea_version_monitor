@@ -1,0 +1,6 @@
+*.wpr
+*.wpu
+*.pyc
+__pycache__/*
+local_settings.py
+*.one
