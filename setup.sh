@@ -1,6 +1,6 @@
 echo "Installing version monitoring dependencies ..."
 sudo apt-get install supervisor python-pip
-pip install --yes boto3 arrow
+sudo pip install --yes boto3 arrow
 
 echo "Installing configuration files ..."
 mkdir `pwd`/logs
