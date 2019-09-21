@@ -33,7 +33,7 @@ if __name__ == "__main__":
         
         changed, added = compare_files(current_status_files, new_status_files)
         
-        
+        if len(changed) > 0:
         
         time.sleep(settings.POLLING_FREQUENCY)
         

@@ -7,3 +7,5 @@ wallet_files = "wallet libbls384_256.so libcrypto.so.10 libgmp.so.10 libgmpxx.so
 
 try:
     from local_settings import *
+except ImportError:
+    pass
