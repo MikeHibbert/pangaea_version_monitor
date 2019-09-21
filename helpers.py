@@ -20,8 +20,28 @@ def get_current_files():
             {
                 "name": obj.key,
                 "size": obj.size,
-                "last_modified": obj.last_modified
+                "last_modified": arrow.get(obj.last_modified).timestamp
             }
         )   
         
+    return files
+
+def write_status_file(files):
+    with open(os.path.join(settings.BASE_DIR, 'pangaea_version_monitor', 'status.one'), "w") as status_file:
+        status_file.write(json.dumps(files))
+        
+        
+        
+class StatusFileNotFoundException(Exception):
+    message = "Status file {} not found".format(os.path.join(settings.BASE_DIR, 'pangaea_version_monitor', 'status.one'))
+    
+def read_status_file():
+    file_path = os.path.join(settings.BASE_DIR, 'pangaea_version_monitor', 'status.one')
+    
+    if os.path.exists(file_path):
+        with open(os.path.join(settings.BASE_DIR, 'pangaea_version_monitor', 'status.one'), "r") as status_file:
+            files = json.loads(status_file.read())
+    else:
+        raise StatusFileNotFoundException()
+    
     return files
