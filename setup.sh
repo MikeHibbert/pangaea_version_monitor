@@ -10,3 +10,5 @@ sudo sed 's?BASE_PATH?'`pwd`'?' "`pwd`/pangaea_version_monitor/conf/pangaea_vers
 sudo sed 's?BASE_PATH?'`pwd`'?' "`pwd`/pangaea_version_monitor/conf/pangaea_node.conf" > /etc/supervisor/conf.d/pangaea_node.conf
 
 sudo supervisorctl reload
+
+echo "All done!"
