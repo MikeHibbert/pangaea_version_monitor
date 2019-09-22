@@ -95,7 +95,7 @@ def download_new_code():
      
     for filename in settings.NODE_FILES:
         command_args = [
-            'curl', '-sSF', 
+            'curl', '-sSf', 
             'http://{}.s3.amazonaws.com/{}{}'.format(settings.HARMONY_BUCKET, settings.RELEASE, filename),
             filename
         ]
