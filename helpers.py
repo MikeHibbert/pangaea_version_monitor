@@ -97,7 +97,7 @@ def download_new_code():
         logger.debug(output)    
         
         command_args = [
-            "chmod", "+x"
+            "chmod", "+x", 
             "node.sh"
         ]
         
