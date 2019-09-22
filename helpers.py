@@ -79,7 +79,7 @@ def download_new_code():
     logging.info("Downloading new code...")
      
     command_args = [
-        'node.sh', '-d'
+        'bash', '-c', '"node.sh -d"'
     ]
     
     os.chdir(settings.BASE_DIR)
