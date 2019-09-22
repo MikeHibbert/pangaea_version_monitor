@@ -4,6 +4,7 @@ import json
 import os
 import arrow
 import subprocess
+import requests
 import logging
 
 logger = logging.getLogger(__name__)
@@ -77,20 +78,31 @@ def stop_node():
     
 def download_new_code():
     logging.info("Downloading new code...")
-     
-    command_args = [
-        'bash', '-c', '"node.sh -d"'
-    ]
     
     os.chdir(settings.BASE_DIR)
     
-    logger.debug("Switching to {} ... node.sh exists = {}".format(settings.BASE_DIR, os.path.exists(os.path.join(settings.BASE_DIR, 'node.sh'))))
-    
-    os.path.exists(os.path.join(settings.BASE_DIR, 'node.sh'))
-    
-    output = subprocess.check_output(command_args)
+    if os.path.exists(os.path.join(settings.BASE_DIR, 'node.sh')):
+        os.remove(os.path.join(settings.BASE_DIR, 'node.sh'))
         
-    logger.debug(output)    
+        r = requests.get("https://raw.githubusercontent.com/harmony-one/harmony/master/scripts/node.sh")
+        
+        if r.status == 200:
+            with open(os.path.join(settings.BASE_DIR, 'node.sh'), 'w') as node_file:
+                node_file.write(r.text)
+        else:
+            raise Exception("Unable to download new node.sh")
+        
+     
+    for filename in settings.NODE_FILES:
+        command_args = [
+            'curl', '-sSF', 
+            'http://{}.s3.amazonaws.com/{}{}'.format(settings.HARMONY_BUCKET, settings.RELEASE, filename),
+            filename
+        ]
+        
+        output = subprocess.check_output(command_args)
+        
+        logger.debug(output)                
     
     
 def call_supervisord(command):
