@@ -121,7 +121,7 @@ def download_new_code():
     
 def call_supervisord(command):
     command_args = [
-        "supervisorctl", "pangaea_node", command
+        "supervisorctl", command, "pangaea_node"
     ]
     
     output = subprocess.check_output(command_args)
