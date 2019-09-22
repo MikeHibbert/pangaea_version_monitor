@@ -86,16 +86,29 @@ def download_new_code():
         
         r = requests.get("https://raw.githubusercontent.com/harmony-one/harmony/master/scripts/node.sh")
         
-        if r.status == 200:
-            with open(os.path.join(settings.BASE_DIR, 'node.sh'), 'w') as node_file:
-                node_file.write(r.text)
-        else:
-            raise Exception("Unable to download new node.sh")
+        command_args = [
+            "wget", 
+            "https://raw.githubusercontent.com/harmony-one/harmony/master/scripts/node.sh",
+            "node.sh"
+        ]
+        
+        output = subprocess.check_output(command_args)
+                
+        logger.debug(output)    
+        
+        command_args = [
+            "chmod", "+x"
+            "node.sh"
+        ]
+        
+        output = subprocess.check_output(command_args)
+                
+        logger.debug(output)          
         
      
     for filename in settings.NODE_FILES:
         command_args = [
-            'curl', # '-sSf', 
+            'curl',  
             'http://{}.s3.amazonaws.com/{}{}'.format(settings.HARMONY_BUCKET, settings.RELEASE, filename),
             '-o',
             filename
