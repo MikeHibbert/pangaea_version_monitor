@@ -84,6 +84,10 @@ def download_new_code():
     
     os.chdir(settings.BASE_DIR)
     
+    logger.debug("Switching to {} ... node.sh exists = {}".format(settings.BASE_DIR, os.path.exists(os.path.join(settings.BASE_DIR, 'node.sh'))))
+    
+    os.path.exists(os.path.join(settings.BASE_DIR, 'node.sh'))
+    
     output = subprocess.check_output(command_args)
         
     logger.debug(output)    
