@@ -45,7 +45,7 @@ def get_file_from_bucket(filename, alt_filename_name=None):
     
     os.chdir(settings.BASE_DIR)
         
-    output = subprocess.check_output(command_and_args)
+    output = subprocess.check_output(command_args)
         
     logger.debug(output)      
 
@@ -84,7 +84,7 @@ def download_new_code():
     
     os.chdir(settings.BASE_DIR)
     
-    output = subprocess.check_output(command_and_args)
+    output = subprocess.check_output(command_args)
         
     logger.debug(output)    
     
@@ -94,7 +94,7 @@ def call_supervisord(command):
         "supervisorctl", "pangaea_node", command
     ]
     
-    output = subprocess.check_output(command_and_args)
+    output = subprocess.check_output(command_args)
     
     logger.debug(output)
 
