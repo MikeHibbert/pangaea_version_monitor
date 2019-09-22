@@ -36,9 +36,19 @@ def get_file_from_bucket(filename, alt_filename_name=None):
     if alt_filename_name:
         download_filename = alt_filename_name
         
-    s3 = boto3.resource('s3')
-    s3.Object(settings.HARMONY_BUCKET, '{}{}'.format(settings.RELEASE, filename)).download_file(download_filename)
+    command_args = [
+        "curl", "-sSf", 
+        "http://{}.s3.amazonaws.com/{}{}".format(settings.HARMONY_BUCKET, settings.RELEASE, filename), 
+        "-o", 
+        "{}".format(download_filename)
+    ]
     
+    os.chdir(settings.BASE_DIR)
+        
+    output = subprocess.check_output(command_and_args)
+        
+    logger.debug(output)      
+
     
 def get_md5_checksum():
     get_file_from_bucket("md5sum.txt", 'md5sum.txt.new')    
