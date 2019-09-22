@@ -97,6 +97,7 @@ def download_new_code():
         command_args = [
             'curl', '-sSf', 
             'http://{}.s3.amazonaws.com/{}{}'.format(settings.HARMONY_BUCKET, settings.RELEASE, filename),
+            '-o',
             filename
         ]
         
