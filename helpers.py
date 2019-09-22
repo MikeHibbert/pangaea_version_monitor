@@ -3,16 +3,20 @@ import settings
 import json
 import os
 import arrow
+import subprocess
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_s3_bucket():
     s3 = boto3.resource('s3')
     bucket = s3.Bucket(settings.HARMONY_BUCKET)
     
-    return bucket
+    return s3, bucket
 
 def get_current_files():
-    bucket = get_s3_bucket()
+    s3, bucket = get_s3_bucket()
     
     files = []    
     for obj in bucket.objects.all():
@@ -26,22 +30,62 @@ def get_current_files():
         
     return files
 
+def get_file_from_bucket(filename, alt_filename_name=None):   
+    download_filename = filename
+    
+    if alt_filename_name:
+        download_filename = alt_filename_name
+        
+    s3 = boto3.resource('s3')
+    s3.Object(settings.HARMONY_BUCKET, '{}{}'.format(settings.RELEASE, filename)).download_file(download_filename)
+    
+    
+def get_md5_checksum():
+    get_file_from_bucket("md5sum.txt", 'md5sum.txt.new')    
+    
+
 def write_status_file(files):
     with open(os.path.join(settings.BASE_DIR, 'pangaea_version_monitor', 'status.one'), "w") as status_file:
-        status_file.write(json.dumps(files))
-        
+        status_file.write(json.dumps(files))        
         
         
 class StatusFileNotFoundException(Exception):
     message = "Status file {} not found".format(os.path.join(settings.BASE_DIR, 'pangaea_version_monitor', 'status.one'))
     
-def read_status_file():
-    file_path = os.path.join(settings.BASE_DIR, 'pangaea_version_monitor', 'status.one')
     
-    if os.path.exists(file_path):
-        with open(os.path.join(settings.BASE_DIR, 'pangaea_version_monitor', 'status.one'), "r") as status_file:
-            files = json.loads(status_file.read())
-    else:
-        raise StatusFileNotFoundException()
+def start_node():
+    logging.info("Starting node")
     
-    return files
+    call_supervisord("start")
+
+
+def stop_node():
+    logging.info("Stopping node")
+    
+    call_supervisord("stop")
+    
+    
+def download_new_code():
+    logging.info("Downloading new code...")
+     
+    command_args = [
+        'node.sh', '-d'
+    ]
+    
+    os.chdir(settings.BASE_DIR)
+    
+    output = subprocess.check_output(command_and_args)
+        
+    logger.debug(output)    
+    
+    
+def call_supervisord(command):
+    command_args = [
+        "supervisorctl", "pangaea_node", command
+    ]
+    
+    output = subprocess.check_output(command_and_args)
+    
+    logger.debug(output)
+
+

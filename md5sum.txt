@@ -1,0 +1,5 @@
+924e79b76db12e5adfec56beae5de36b  bin/bootnode
+ef70fe43d4055ccdc95df67bfa415c46  bin/harmony
+ad2b848a10a1df40d217f9bb130f4f27  bin/txgen
+0c5b92555b97db2f6eba9544038896d8  bin/wallet
+a0bf1004af9d3cbb73b402d866cf11ef  bin/wallet_stress_test

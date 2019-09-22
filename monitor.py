@@ -1,41 +1,61 @@
 import time
+import os
+import shutil
+import difflib
+import subprocess
+import logging
 import settings
 from helpers import *
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
    
-def compare_files(current_files, new_files):
-    changed_files = []
-    added_files = []
-    
-    for new_file in new_files:
-        not_found = True        
-        for current_file in current_files:
-        
-            if current_file['name'] == new_file['name']:
-                not_found = False
-                if current_file['last_modified'] != new_file['last_modified']:
-                    changed_files.append(new_file)
-                    
-        if not_found:
-            added_files.append(new_file)
+def compare_md5_files():
+    with open(os.path.join(settings.BASE_DIR, 'md5sum.txt'), 'r') as old_md5:
+        old = old_md5.read()
+        with open(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), 'r') as new_md5:
+            new = new_md5.read()
             
-    return changed_files, added_files
+            diff = difflib.unified_diff(old, new)
+            
+            lines = [l for l in diff]
+            
+            if len(lines) > 0:
+                logger.debug("md5sum.txt has changed so the code must be updated")
+                return False
+            
+    logger.debug("md5sum.txt has not changed so the code must not be updated")
+    return True
+
+
+def update_node():
+    logger.debug("Updating node ...")
+    
+    stop_node()
+    
+    download_new_installation()
+    
+    start_node()
 
                 
 if __name__ == "__main__":
-    try:
-        current_status_files = read_status_file()
-    except StatusFileNotFoundException:
-        current_status_files = get_current_files()        
-        write_status_file(current_status_files)
+    get_md5_checksum()
+    
+    if not os.path.exists(os.path.join(settings.BASE_DIR, 'md5sum.txt')):
+        shutil.copy(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), os.path.join(settings.BASE_DIR, 'md5sum.txt'))
+        os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'))
         
     while True:
-        new_status_files = get_current_files()
+        the_same = compare_md5_files()
         
-        changed, added = compare_files(current_status_files, new_status_files)
+        if not the_same:
+            download_new_code()
+            restart_node()
         
-        if len(changed) > 0:
-            process_changed(changed)
-            
         time.sleep(settings.POLLING_FREQUENCY)
+        
+        get_md5_checksum()
+            
         
     
