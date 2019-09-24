@@ -48,6 +48,8 @@ if __name__ == "__main__":
         os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'))
         
     while True:
+        get_md5_checksum()
+        
         the_same = compare_md5_files()
         
         if not the_same:
@@ -70,8 +72,7 @@ if __name__ == "__main__":
             
         if os.path.exists(os.path.join(settings.BASE_DIR, 'md5sum.txt')):
             os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt'))
-            shutil.copy(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), os.path.join(settings.BASE_DIR, 'md5sum.txt'))
-            os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'))        
+            shutil.copy(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), os.path.join(settings.BASE_DIR, 'md5sum.txt'))       
 
         time.sleep(settings.POLLING_FREQUENCY)
         
