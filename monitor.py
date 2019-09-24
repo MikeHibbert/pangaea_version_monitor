@@ -48,13 +48,7 @@ if __name__ == "__main__":
         shutil.copy(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), os.path.join(settings.BASE_DIR, 'md5sum.txt'))
         os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'))
         
-        files = glob.glob(os.path.join(settings.BASE_DIR, 'md5sum.txt::*'))
         
-        for f in files:
-            try:
-                os.remove(f)
-            except:
-                pass
             
         
     while True:
@@ -67,6 +61,15 @@ if __name__ == "__main__":
             time.sleep(settings.SUPERVISOR_COOL_OFF)
             
             download_new_code()
+            
+            files = glob.glob(os.path.join(settings.BASE_DIR, 'md5sum.txt::*'))
+            
+            for f in files:
+                try:
+                    os.remove(os.path.join(settings.BASE_DIR,f))
+                except:
+                    pass            
+
             start_node()
         
         time.sleep(settings.POLLING_FREQUENCY)
