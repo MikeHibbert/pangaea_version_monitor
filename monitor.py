@@ -62,16 +62,16 @@ if __name__ == "__main__":
             
             download_new_code()
             
-            files = glob.glob(os.path.join(settings.BASE_DIR, 'md5sum.txt::*'))
-            
-            for f in files:
-                try:
-                    os.remove(os.path.join(settings.BASE_DIR,f))
-                except:
-                    pass            
-
             start_node()
+            
+        files = glob.glob(os.path.join(settings.BASE_DIR, 'md5sum.txt::*'))          
         
+        for f in files:
+            try:
+                os.remove(os.path.join(settings.BASE_DIR,f))
+            except:
+                pass          
+
         time.sleep(settings.POLLING_FREQUENCY)
         
         get_md5_checksum()
