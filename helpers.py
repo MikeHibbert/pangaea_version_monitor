@@ -84,29 +84,31 @@ def download_new_code():
     if os.path.exists(os.path.join(settings.BASE_DIR, 'node.sh')):
         os.remove(os.path.join(settings.BASE_DIR, 'node.sh'))
         
-        r = requests.get("https://raw.githubusercontent.com/harmony-one/harmony/master/scripts/node.sh")
+        # r = requests.get("https://raw.githubusercontent.com/harmony-one/harmony/master/scripts/node.sh")
         
-        command_args = [
-            "wget", 
-            "https://raw.githubusercontent.com/harmony-one/harmony/master/scripts/node.sh",
-            "node.sh"
-        ]
-        
-        output = subprocess.check_output(command_args)
-                
-        logger.debug(output)    
-        
-        command_args = [
-            "chmod", "+x", 
-            "node.sh"
-        ]
-        
-        output = subprocess.check_output(command_args)
-                
-        logger.debug(output)          
+    command_args = [
+        "wget", 
+        "https://raw.githubusercontent.com/harmony-one/harmony/master/scripts/node.sh",
+        "node.sh"
+    ]
+    
+    output = subprocess.check_output(command_args)
+            
+    logger.debug(output)    
+    
+    command_args = [
+        "chmod", "+x", 
+        "node.sh"
+    ]
+    
+    output = subprocess.check_output(command_args)
+            
+    logger.debug(output)          
         
      
     for filename in settings.NODE_FILES:
+        logger.debug("Downloading {}".format(filename))
+        
         command_args = [
             'curl',  
             'http://{}.s3.amazonaws.com/{}{}'.format(settings.HARMONY_BUCKET, settings.RELEASE, filename),

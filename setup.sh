@@ -1,5 +1,15 @@
 echo "Installing version monitoring dependencies ..."
-sudo apt-get install supervisor python-pip
+
+do_apt_install() {
+    sudo apt-get install supervisor python-pip
+}
+
+do_yum_install() {
+    sudo yum install supervisor python-pip
+}
+
+do_apt_install
+
 sudo pip install -r `pwd`/pangaea_version_monitor/conf/requirements.txt
 
 echo "Installing configuration files ..."
