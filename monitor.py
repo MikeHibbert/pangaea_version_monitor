@@ -50,9 +50,9 @@ if __name__ == "__main__":
         the_same = compare_md5_files()
         
         if not the_same:
-            #stop_node()
+            stop_node()
             download_new_code()
-            #start_node()
+            start_node()
         
         time.sleep(settings.POLLING_FREQUENCY)
         
