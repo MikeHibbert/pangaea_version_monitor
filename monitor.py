@@ -51,6 +51,8 @@ if __name__ == "__main__":
         
         if not the_same:
             stop_node()
+            time.sleep(10)
+            
             download_new_code()
             start_node()
         
