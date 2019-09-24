@@ -1,5 +1,6 @@
 import time
 import os
+import glob
 import shutil
 import difflib
 import subprocess
@@ -43,8 +44,18 @@ if __name__ == "__main__":
     get_md5_checksum()
     
     if not os.path.exists(os.path.join(settings.BASE_DIR, 'md5sum.txt')):
+        os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt'))
         shutil.copy(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), os.path.join(settings.BASE_DIR, 'md5sum.txt'))
         os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'))
+        
+        files = glob.glob(os.path.join(settings.BASE_DIR, 'md5sum.txt::*'))
+        
+        for f in files:
+            try:
+                os.remove(f)
+            except:
+                pass
+            
         
     while True:
         the_same = compare_md5_files()
