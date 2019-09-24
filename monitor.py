@@ -51,7 +51,9 @@ if __name__ == "__main__":
         
         if not the_same:
             stop_node()
-            time.sleep(10)
+            
+            # give supervisor time to release harmony binary
+            time.sleep(settings.SUPERVISOR_COOL_OFF)
             
             download_new_code()
             start_node()

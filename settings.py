@@ -3,6 +3,7 @@ import platform
 
 HARMONY_BUCKET = "pub.harmony.one"
 POLLING_FREQUENCY = 60
+SUPERVISOR_COOL_OFF = 20
 BASE_DIR = os.path.abspath(__file__).replace('settings.pyc', '').replace('settings.py', '')
 RELEASE = 'release/linux-x86_64/master/'
 
