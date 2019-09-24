@@ -47,17 +47,17 @@ def clean_up_downloads():
         logger.debug("Removing {}".format(os.path.join(settings.BASE_DIR,f)))
         os.remove(os.path.join(settings.BASE_DIR,f))        
 
-    if os.path.exists(os.path.join(settings.BASE_DIR, 'md5sum.txt')):
-        os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt'))
-        shutil.copy(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), os.path.join(settings.BASE_DIR, 'md5sum.txt'))      
+
+    os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt'))
+    shutil.move(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), os.path.join(settings.BASE_DIR, 'md5sum.txt'))      
 
                 
 if __name__ == "__main__":
     get_md5_checksum()
     
     if not os.path.exists(os.path.join(settings.BASE_DIR, 'md5sum.txt')):
-        shutil.copy(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), os.path.join(settings.BASE_DIR, 'md5sum.txt'))
-        os.remove(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'))
+        shutil.move(os.path.join(settings.BASE_DIR, 'md5sum.txt.new'), os.path.join(settings.BASE_DIR, 'md5sum.txt'))
+
         
     while True:
         get_md5_checksum()
